@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added 
   fetchNeighborhoods();
   fetchCuisines();
+  addDefaultFocus();
 });
 
 /**
@@ -162,7 +163,7 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.alt = restaurant.name;
+  image.alt = restaurant.name + ' image';
   li.append(image);
 
   const name = document.createElement('h1');
@@ -180,6 +181,7 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
+  more.alt = restaurant.name;
   li.append(more)
 
   return li
@@ -198,8 +200,11 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     }
     self.markers.push(marker);
   });
-
 } 
+
+addDefaultFocus = () => {
+  document.getElementById('map-container').tabIndex = -1;
+}
 
 //Register the new Service Worker
 
