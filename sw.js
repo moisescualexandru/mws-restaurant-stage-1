@@ -1,8 +1,8 @@
-var CACHE_NAME = 'restaurant1';
+var CACHE_NAME = 'restaurant2';
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', function(event) {
 	event.waitUntil(
-		caches.open(CACHE_NAME).then( (cache) => {
+		caches.open(CACHE_NAME).then(function(cache) {
 			return cache.addAll([
 				'/',
 				'/index.html',
@@ -23,35 +23,37 @@ self.addEventListener('install', (event) => {
 				'/img/10.jpg',
 				'/data/restaurants.json'
 			]);
-		}).catch((error) => {
+		}).catch(function(error) {
 			console.log(error);
 		})
 	);
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', function(event) {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(function(cacheNames) {
       return Promise.all(
-        cacheNames.filter((cacheName) => {
-          return cacheName;
-        }).map((cacheName) => {
-          return caches.delete(CACHE_NAME);
+        cacheNames.filter(function(cacheName) {
+          return cacheName != CACHE_NAME;
+        }).map(function(cacheName) {
+          return caches.delete(cacheName);
         })
       );
+    }).catch(function(error) {
+    	console.log(error);
     })
   );
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', function(event) {
 	event.respondWith(
-		caches.match(event.request).then((response) => {
+		caches.match(event.request).then(function(response) {
 			return response || fetch(event.request);
 		})
 	);
 });
 
-self.addEventListener('message', (event) => {
+self.addEventListener('message', function(event) {
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }

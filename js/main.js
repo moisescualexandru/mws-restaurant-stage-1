@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added 
   fetchNeighborhoods();
   fetchCuisines();
-  addDefaultFocus();
   registerServiceWorker();
 });
 
@@ -183,6 +182,7 @@ createRestaurantHTML = (restaurant) => {
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
   more.alt = restaurant.name;
+  more.tabIndex = 1;
   li.append(more)
 
   return li
@@ -202,11 +202,6 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 } 
-
-addDefaultFocus = () => {
-  document.getElementById('map-container').tabIndex = -1;
-  document.getElementById('map').tabIndex = -1;
-}
 
 //Register the new Service Worker
 
