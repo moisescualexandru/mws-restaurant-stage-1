@@ -3,7 +3,7 @@ let restaurants,
   cuisines
 var newMap
 var markers = []
-// registerServiceWorker();//
+
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchNeighborhoods();
   fetchCuisines();
   addDefaultFocus();
+  registerServiceWorker();
 });
 
 /**
@@ -204,17 +205,53 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 
 addDefaultFocus = () => {
   document.getElementById('map-container').tabIndex = -1;
+  document.getElementById('map').tabIndex = -1;
 }
 
 //Register the new Service Worker
 
-// registerServiceWorker = () => {
-//   if (!navigator.serviceWorker) console.log('Not Working');
+registerServiceWorker = () => {
+  if (!navigator.serviceWorker) console.log('Not Working');
 
-//   navigator.serviceWorker.register ('/sw.js').then(function(reg) {
-//     console.log('Service Worker registered');
-//   })
-// }
+  var indexController = this;
+
+  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+    if (!navigator.serviceWorker.controller) {
+      return;
+      console.log('Service Worker registered');
+    }
+
+    if (reg.waiting) {
+      indexController.updateReady(reg.waiting);
+      return;
+    }
+
+    if (reg.installing) {
+      indexController.trackInstalling(reg.installing);
+      return;
+    }
+
+    reg.addEventListener('updatefound', function() {
+      indexController.trackInstalling(reg.installing);
+    });
+  });
+}
+
+updateReady = (worker) => {
+  var answer = confirm("New version available");
+  if (!answer) return;
+  worker.postMessage({action: 'skipWaiting'});
+}
+
+trackInstalling = (worker) => {
+  var indexController = this;
+  worker.addEventListener('statechange', () => {
+    if (worker.state == 'installed') {
+      indexController.updateReady(worker);
+    }
+  });
+}
+
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
