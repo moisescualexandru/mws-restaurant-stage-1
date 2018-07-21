@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added 
   fetchNeighborhoods();
   fetchCuisines();
+  _registerServiceWorker();
 });
 
 /**
@@ -161,6 +162,7 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = restaurant.name;
   li.append(image);
 
   const name = document.createElement('h1');
@@ -198,6 +200,16 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 
 } 
+
+//Register the new Service Worker
+
+_registerServiceWorker = function() {
+  if (!navigator.serviceWorker) return;
+
+  navigator.serviceWorker.register ('/sw.js').then(function(reg) {
+    console.log('Service Worker registered');
+  });
+}
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
