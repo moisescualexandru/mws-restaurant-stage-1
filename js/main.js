@@ -3,6 +3,7 @@ let restaurants,
   cuisines
 var newMap
 var markers = []
+// registerServiceWorker();//
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -11,7 +12,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   initMap(); // added 
   fetchNeighborhoods();
   fetchCuisines();
-  _registerServiceWorker();
 });
 
 /**
@@ -203,13 +203,13 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 
 //Register the new Service Worker
 
-_registerServiceWorker = function() {
-  if (!navigator.serviceWorker) return;
+// registerServiceWorker = () => {
+//   if (!navigator.serviceWorker) console.log('Not Working');
 
-  navigator.serviceWorker.register ('/sw.js').then(function(reg) {
-    console.log('Service Worker registered');
-  });
-}
+//   navigator.serviceWorker.register ('/sw.js').then(function(reg) {
+//     console.log('Service Worker registered');
+//   })
+// }
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
