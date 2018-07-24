@@ -6,7 +6,50 @@ var newMap;
  */
 document.addEventListener('DOMContentLoaded', (event) => {  
   initMap();
+  registerServiceWorker();
 });
+
+registerServiceWorker = () => {
+  if (!navigator.serviceWorker) console.log('Not Working');
+
+  var indexController = this;
+
+  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+    if (!navigator.serviceWorker.controller) {
+      return;
+      console.log('Service Worker registered');
+    }
+
+    if (reg.waiting) {
+      indexController.updateReady(reg.waiting);
+      return;
+    }
+
+    if (reg.installing) {
+      indexController.trackInstalling(reg.installing);
+      return;
+    }
+
+    reg.addEventListener('updatefound', function() {
+      indexController.trackInstalling(reg.installing);
+    });
+  });
+}
+
+updateReady = (worker) => {
+  var answer = confirm("New version available");
+  if (!answer) return;
+  worker.postMessage({action: 'skipWaiting'});
+}
+
+trackInstalling = (worker) => {
+  var indexController = this;
+  worker.addEventListener('statechange', () => {
+    if (worker.state == 'installed') {
+      indexController.updateReady(worker);
+    }
+  });
+}
 
 /**
  * Initialize leaflet map
@@ -89,6 +132,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = 'Image with ' + restaurant.name;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -163,6 +207,7 @@ createReviewHTML = (review) => {
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   li.appendChild(comments);
+  li.tabIndex = 0;
 
   return li;
 }

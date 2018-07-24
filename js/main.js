@@ -3,7 +3,7 @@ let restaurants,
   cuisines
 var newMap
 var markers = []
-
+let i = 1;
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -13,8 +13,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchNeighborhoods();
   fetchCuisines();
   registerServiceWorker();
+  addDefaultFocus();
 });
 
+addDefaultFocus = () => {
+  document.getElementById('first').focus();
+}
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -182,8 +186,9 @@ createRestaurantHTML = (restaurant) => {
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
   more.alt = restaurant.name;
-  more.tabIndex = 1;
-  li.append(more)
+  more.setAttribute('aria-label', 'details for '+restaurant.name+' restaurant');
+  li.append(more);
+  li.tabIndex = -1;
 
   return li
 }
@@ -246,6 +251,7 @@ trackInstalling = (worker) => {
     }
   });
 }
+
 
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {

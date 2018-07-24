@@ -1,4 +1,4 @@
-var CACHE_NAME = 'restaurant2';
+var CACHE_NAME = 'restaurant3';
 
 self.addEventListener('install', function(event) {
 	event.waitUntil(
