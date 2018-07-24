@@ -1,8 +1,8 @@
 let restaurants,
   neighborhoods,
-  cuisines
-var newMap
-var markers = []
+  cuisines;
+var newMap;
+var markers = [];
 let i = 1;
 
 /**
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 addDefaultFocus = () => {
   document.getElementById('first').focus();
-}
+};
 /**
  * Fetch all neighborhoods and set their HTML.
  */
@@ -31,7 +31,7 @@ fetchNeighborhoods = () => {
       fillNeighborhoodsHTML();
     }
   });
-}
+};
 
 /**
  * Set neighborhoods HTML.
@@ -44,7 +44,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
     option.value = neighborhood;
     select.append(option);
   });
-}
+};
 
 /**
  * Fetch all cuisines and set their HTML.
@@ -58,7 +58,7 @@ fetchCuisines = () => {
       fillCuisinesHTML();
     }
   });
-}
+};
 
 /**
  * Set cuisines HTML.
@@ -72,7 +72,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
     option.value = cuisine;
     select.append(option);
   });
-}
+};
 
 /**
  * Initialize leaflet map, called from HTML.
@@ -93,7 +93,7 @@ initMap = () => {
   }).addTo(newMap);
 
   updateRestaurants();
-}
+};
 /* window.initMap = () => {
   let loc = {
     lat: 40.722216,
@@ -127,8 +127,8 @@ updateRestaurants = () => {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
     }
-  })
-}
+  });
+};
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
@@ -145,7 +145,7 @@ resetRestaurants = (restaurants) => {
   }
   self.markers = [];
   self.restaurants = restaurants;
-}
+};
 
 /**
  * Create all restaurants HTML and add them to the webpage.
@@ -156,7 +156,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     ul.append(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
-}
+};
 
 /**
  * Create restaurant HTML.
@@ -190,8 +190,8 @@ createRestaurantHTML = (restaurant) => {
   li.append(more);
   li.tabIndex = -1;
 
-  return li
-}
+  return li;
+};
 
 /**
  * Add markers for current restaurants to the map.
@@ -206,7 +206,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     }
     self.markers.push(marker);
   });
-} 
+};
 
 //Register the new Service Worker
 
@@ -235,13 +235,13 @@ registerServiceWorker = () => {
       indexController.trackInstalling(reg.installing);
     });
   });
-}
+};
 
 updateReady = (worker) => {
   var answer = confirm("New version available");
   if (!answer) return;
   worker.postMessage({action: 'skipWaiting'});
-}
+};
 
 trackInstalling = (worker) => {
   var indexController = this;
@@ -250,7 +250,7 @@ trackInstalling = (worker) => {
       indexController.updateReady(worker);
     }
   });
-}
+};
 
 
 /* addMarkersToMap = (restaurants = self.restaurants) => {
